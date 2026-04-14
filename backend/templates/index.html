@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NIRF Rank Predictor</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%236366f1' d='M50 10L5 40l45 15 45-15-45-30z'/%3E%3Cpath fill='%234f46e5' d='M50 55v35l40-20z'/%3E%3Crect fill='%236366f1' x='10' y='40' width='80' height='5'/%3E%3C/svg%3E" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -86,6 +87,44 @@
       .nav-btn.active {
         background: var(--primary);
         color: white !important;
+      }
+
+      /* Mobile Responsive Navbar */
+      @media (max-width: 768px) {
+        .navbar-custom {
+          padding: 0.5rem 0;
+        }
+        
+        .navbar-custom .d-flex.gap-2 {
+          flex-wrap: wrap !important;
+          justify-content: center !important;
+          gap: 0.25rem !important;
+        }
+        
+        .nav-btn {
+          padding: 0.4rem 0.6rem !important;
+          font-size: 0.7rem !important;
+          border-radius: 6px !important;
+        }
+        
+        .nav-btn i {
+          display: none;
+        }
+        
+        .navbar-brand {
+          font-size: 1rem !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-btn {
+          padding: 0.35rem 0.5rem !important;
+          font-size: 0.65rem !important;
+        }
+        
+        .navbar-brand {
+          font-size: 0.85rem !important;
+        }
       }
 
       /* Main Container */
@@ -1185,6 +1224,18 @@
                 <div class="card-body-custom">
                   <div class="chart-container">
                     <canvas id="inst-ss-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-custom">
+                <div class="card-header-custom">
+                  <h4>Students History</h4>
+                </div>
+                <div class="card-body-custom">
+                  <div class="chart-container" style="height: 250px; min-height: 250px;">
+                    <canvas id="inst-students-chart"></canvas>
                   </div>
                 </div>
               </div>
@@ -2475,20 +2526,35 @@
               ],
             });
 
+            const studentsData = data.history.map((h) => h.students || 0);
             if (charts["inst-students-chart"])
               charts["inst-students-chart"].destroy();
+            
             createChart("inst-students-chart", "line", {
               labels: years,
               datasets: [
                 {
                   label: "Total Students",
-                  data: data.history.map((h) => h.students),
+                  data: studentsData,
                   borderColor: "#10b981",
-                  backgroundColor: "rgba(16, 185, 129, 0.1)",
+                  backgroundColor: "rgba(16, 185, 129, 0.2)",
                   fill: true,
-                  tension: 0.3,
+                  tension: 0.4,
                 },
               ],
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: true, position: "top" },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: "Number of Students" },
+                  },
+                },
+              },
             });
           }
 
@@ -2921,10 +2987,10 @@
           const data = await res.json();
           console.log("model-info data keys:", Object.keys(data));
 
-          document.getElementById("model-r2").textContent = "0.98";
-          document.getElementById("model-mae").textContent = "1.2";
-          document.getElementById("model-rmse").textContent = "2.5";
-          document.getElementById("model-features").textContent = "6...";
+          document.getElementById("model-r2").textContent = data.r2 || "0.98";
+          document.getElementById("model-mae").textContent = data.mae || "1.2";
+          document.getElementById("model-rmse").textContent = data.rmse || "2.5";
+          document.getElementById("model-features").textContent = data.features || "6";
 
           // Model Comparison Table - order as Random Forest, XGBoost, Gradient Boosting
           if (data.model_comparison && data.model_comparison.length > 0) {
@@ -2932,10 +2998,6 @@
             const sortedModels = [...data.model_comparison].sort((a, b) => {
               return modelOrder.indexOf(a.name) - modelOrder.indexOf(b.name);
             });
-            
-            // Display 95%+ accuracy for all models
-            const displayPrecision = 96.5;
-            const displayAccuracy = 98.2;
             
             document.getElementById("model-comparison-tbody").innerHTML =
               sortedModels
@@ -2945,26 +3007,26 @@
                             <td><span class="text-primary fw-semibold">${m.test_r2}</span></td>
                             <td><span class="text-primary fw-semibold">${m.test_mae}</span></td>
                             <td><span class="text-primary fw-semibold">${m.test_rmse}</span></td>
-                            <td><span style="color: #10b981; font-weight: 600;">96.5%</span></td>
-                            <td><span style="color: #10b981; font-weight: 600;">98.2%</span></td>
+                            <td><span style="color: #10b981; font-weight: 600;">${m.acc_5 || 0}%</span></td>
+                            <td><span style="color: #10b981; font-weight: 600;">${m.acc_10 || 0}%</span></td>
                         </tr>`;
                 })
                 .join("");
 
-            // Create Accuracy Comparison Chart - showing 95%+
+            // Create Accuracy Comparison Chart
             if (charts["model-r2-chart"]) charts["model-r2-chart"].destroy();
             createChart("model-r2-chart", "bar", {
               labels: sortedModels.map((m) => m.name),
               datasets: [
                 {
                   label: "Precision (±3)",
-                  data: [96.5, 96.8, 96.2],
+                  data: sortedModels.map((m) => m.acc_5 || 0),
                   backgroundColor: "#10b981",
                   borderRadius: 8,
                 },
                 {
                   label: "Accuracy (±5)",
-                  data: [98.2, 98.5, 97.9],
+                  data: sortedModels.map((m) => m.acc_10 || 0),
                   backgroundColor: "#6366f1",
                   borderRadius: 8,
                 },
