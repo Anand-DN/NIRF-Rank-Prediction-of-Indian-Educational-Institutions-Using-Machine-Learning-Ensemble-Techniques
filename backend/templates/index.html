@@ -2492,25 +2492,32 @@
             if (charts["inst-students-chart"])
               charts["inst-students-chart"].destroy();
             
-            // Check if there's any student data
-            const hasStudentData = studentsData.some(v => v > 0);
-            if (hasStudentData) {
-              createChart("inst-students-chart", "bar", {
-                labels: years,
-                datasets: [
-                  {
-                    label: "Total Students",
-                    data: studentsData,
-                    backgroundColor: "#10b981",
-                    borderRadius: 4,
+            createChart("inst-students-chart", "line", {
+              labels: years,
+              datasets: [
+                {
+                  label: "Total Students",
+                  data: studentsData,
+                  borderColor: "#10b981",
+                  backgroundColor: "rgba(16, 185, 129, 0.2)",
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: true, position: "top" },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: "Number of Students" },
                   },
-                ],
-              });
-            } else {
-              // Show placeholder if no student data
-              document.getElementById("inst-students-chart").parentElement.innerHTML = 
-                '<div class="text-center text-muted py-5">No student data available for this institute</div>';
-            }
+                },
+              },
+            });
           }
 
           let multiHypHtml = '<div class="row g-3">';
