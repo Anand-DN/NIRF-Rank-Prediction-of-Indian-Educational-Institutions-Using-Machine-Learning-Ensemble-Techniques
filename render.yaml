@@ -1,0 +1,12 @@
+# render.yaml - Render Deployment Configuration
+
+services:
+  - type: web
+    name: nirf-rank-predictor
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app -b 0.0.0.0:$PORT
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
