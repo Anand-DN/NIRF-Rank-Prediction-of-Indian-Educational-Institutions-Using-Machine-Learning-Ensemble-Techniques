@@ -2945,10 +2945,6 @@
               return modelOrder.indexOf(a.name) - modelOrder.indexOf(b.name);
             });
             
-            // Display 95%+ accuracy for all models
-            const displayPrecision = 96.5;
-            const displayAccuracy = 98.2;
-            
             document.getElementById("model-comparison-tbody").innerHTML =
               sortedModels
                 .map((m) => {
@@ -2957,26 +2953,26 @@
                             <td><span class="text-primary fw-semibold">${m.test_r2}</span></td>
                             <td><span class="text-primary fw-semibold">${m.test_mae}</span></td>
                             <td><span class="text-primary fw-semibold">${m.test_rmse}</span></td>
-                            <td><span style="color: #10b981; font-weight: 600;">96.5%</span></td>
-                            <td><span style="color: #10b981; font-weight: 600;">98.2%</span></td>
+                            <td><span style="color: #10b981; font-weight: 600;">${m.acc_5 || 0}%</span></td>
+                            <td><span style="color: #10b981; font-weight: 600;">${m.acc_10 || 0}%</span></td>
                         </tr>`;
                 })
                 .join("");
 
-            // Create Accuracy Comparison Chart - showing 95%+
+            // Create Accuracy Comparison Chart
             if (charts["model-r2-chart"]) charts["model-r2-chart"].destroy();
             createChart("model-r2-chart", "bar", {
               labels: sortedModels.map((m) => m.name),
               datasets: [
                 {
                   label: "Precision (±3)",
-                  data: [96.5, 96.8, 96.2],
+                  data: sortedModels.map((m) => m.acc_5 || 0),
                   backgroundColor: "#10b981",
                   borderRadius: 8,
                 },
                 {
                   label: "Accuracy (±5)",
-                  data: [98.2, 98.5, 97.9],
+                  data: sortedModels.map((m) => m.acc_10 || 0),
                   backgroundColor: "#6366f1",
                   borderRadius: 8,
                 },
