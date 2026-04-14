@@ -1189,6 +1189,18 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="card-custom">
+                <div class="card-header-custom">
+                  <h4>Students History</h4>
+                </div>
+                <div class="card-body-custom">
+                  <div class="chart-container">
+                    <canvas id="inst-students-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Institute Correlation Scatter Plot -->
@@ -2475,9 +2487,9 @@
               ],
             });
 
-            if (charts["inst-ss-chart"])
-              charts["inst-ss-chart"].destroy();
-            createChart("inst-ss-chart", "line", {
+            if (charts["inst-students-chart"])
+              charts["inst-students-chart"].destroy();
+            createChart("inst-students-chart", "line", {
               labels: years,
               datasets: [
                 {
