@@ -89,6 +89,44 @@
         color: white !important;
       }
 
+      /* Mobile Responsive Navbar */
+      @media (max-width: 768px) {
+        .navbar-custom {
+          padding: 0.5rem 0;
+        }
+        
+        .navbar-custom .d-flex.gap-2 {
+          flex-wrap: wrap !important;
+          justify-content: center !important;
+          gap: 0.25rem !important;
+        }
+        
+        .nav-btn {
+          padding: 0.4rem 0.6rem !important;
+          font-size: 0.7rem !important;
+          border-radius: 6px !important;
+        }
+        
+        .nav-btn i {
+          display: none;
+        }
+        
+        .navbar-brand {
+          font-size: 1rem !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-btn {
+          padding: 0.35rem 0.5rem !important;
+          font-size: 0.65rem !important;
+        }
+        
+        .navbar-brand {
+          font-size: 0.85rem !important;
+        }
+      }
+
       /* Main Container */
       .main-container {
         max-width: 1400px;
