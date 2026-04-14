@@ -3013,20 +3013,14 @@
                 })
                 .join("");
 
-            // Create Accuracy Comparison Chart
+            // Create R² Score Comparison Chart
             if (charts["model-r2-chart"]) charts["model-r2-chart"].destroy();
             createChart("model-r2-chart", "bar", {
               labels: sortedModels.map((m) => m.name),
               datasets: [
                 {
-                  label: "Precision (±3)",
-                  data: sortedModels.map((m) => m.acc_5 || 0),
-                  backgroundColor: "#10b981",
-                  borderRadius: 8,
-                },
-                {
-                  label: "Accuracy (±5)",
-                  data: sortedModels.map((m) => m.acc_10 || 0),
+                  label: "R² Score",
+                  data: sortedModels.map((m) => m.test_r2 || 0),
                   backgroundColor: "#6366f1",
                   borderRadius: 8,
                 },
@@ -3035,18 +3029,18 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                  legend: { position: "top" },
+                  legend: { display: false },
                   title: {
                     display: true,
-                    text: "Model Accuracy Comparison (%)",
+                    text: "Model R² Score Comparison (Higher is Better)",
                     font: { size: 14, weight: "bold" }
                   }
                 },
                 scales: {
                   y: {
                     beginAtZero: true,
-                    max: 100,
-                    title: { display: true, text: "Accuracy (%)" }
+                    max: 1,
+                    title: { display: true, text: "R² Score" }
                   },
                 },
               },
@@ -3087,14 +3081,19 @@
           }
 
           console.log("Setting charts...");
+          console.log("Feature importance:", data.feature_importance);
           if (data.feature_importance && data.feature_importance.length > 0) {
             if (charts["feature-chart"]) charts["feature-chart"].destroy();
+            
+            const featureLabels = data.feature_importance.map((f) => f.Feature);
+            const featureValues = data.feature_importance.map((f) => parseFloat(f.Importance) || 0);
+            
             createChart("feature-chart", "bar", {
-              labels: data.feature_importance.map((f) => f.Feature),
+              labels: featureLabels,
               datasets: [
                 {
                   label: "Importance",
-                  data: data.feature_importance.map((f) => f.Importance),
+                  data: featureValues,
                   backgroundColor: "#6366f1",
                   borderRadius: 6,
                 },
@@ -3106,9 +3105,16 @@
                 plugins: {
                   legend: { display: false },
                 },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                  },
+                },
               },
             });
             console.log("Feature chart created");
+          } else {
+            console.log("No feature importance data available");
           }
 
           if (data.bias_analysis && data.bias_analysis.length > 0) {
