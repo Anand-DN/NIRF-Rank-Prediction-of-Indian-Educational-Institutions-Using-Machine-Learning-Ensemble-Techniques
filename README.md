@@ -7,6 +7,7 @@ AI-powered ranking prediction for educational institutions using Machine Learnin
 ## 📋 Overview
 
 The NIRF (National Institutional Ranking Framework) Rank Predictor is a web application that predicts university rankings based on various performance metrics using machine learning algorithms.
+Live Link is here:  https://nirf-rank-prediction-of-indian.onrender.com/
 
 ## ✨ Features
 
