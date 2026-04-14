@@ -1195,7 +1195,7 @@
                   <h4>Students History</h4>
                 </div>
                 <div class="card-body-custom">
-                  <div class="chart-container">
+                  <div class="chart-container" style="height: 250px; min-height: 250px;">
                     <canvas id="inst-students-chart"></canvas>
                   </div>
                 </div>
@@ -2487,21 +2487,29 @@
               ],
             });
 
+            const studentsData = data.history.map((h) => h.students || 0);
             if (charts["inst-students-chart"])
               charts["inst-students-chart"].destroy();
-            createChart("inst-students-chart", "line", {
-              labels: years,
-              datasets: [
-                {
-                  label: "Total Students",
-                  data: data.history.map((h) => h.students),
-                  borderColor: "#10b981",
-                  backgroundColor: "rgba(16, 185, 129, 0.1)",
-                  fill: true,
-                  tension: 0.3,
-                },
-              ],
-            });
+            
+            // Check if there's any student data
+            const hasStudentData = studentsData.some(v => v > 0);
+            if (hasStudentData) {
+              createChart("inst-students-chart", "bar", {
+                labels: years,
+                datasets: [
+                  {
+                    label: "Total Students",
+                    data: studentsData,
+                    backgroundColor: "#10b981",
+                    borderRadius: 4,
+                  },
+                ],
+              });
+            } else {
+              // Show placeholder if no student data
+              document.getElementById("inst-students-chart").parentElement.innerHTML = 
+                '<div class="text-center text-muted py-5">No student data available for this institute</div>';
+            }
           }
 
           let multiHypHtml = '<div class="row g-3">';
