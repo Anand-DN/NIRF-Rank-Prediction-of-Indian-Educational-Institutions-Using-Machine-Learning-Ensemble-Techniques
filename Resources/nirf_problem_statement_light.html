@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #f9f8f5;
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.12);
+    --accent: #1a6b3c;
+    --accent2: #1a5c8a;
+    --accent-bg: rgba(26,107,60,0.07);
+    --accent2-bg: rgba(26,92,138,0.07);
+    --muted: #8a8d7a;
+    --text: #3a3d2e;
+    --white: #1a1c12;
+    --red: #c0392b;
+    --red-bg: rgba(192,57,43,0.07);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 40px 56px;
+    position: relative;
+  }
+
+  .z1 { position: relative; z-index: 1; }
+
+  /* ── TOP BANNER ── */
+  .banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid var(--border2);
+    margin-bottom: 32px;
+  }
+  .banner-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .banner-right { display: flex; gap: 8px; }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .chip-green { background: rgba(26,107,60,0.1); color: var(--accent); border: 1px solid rgba(26,107,60,0.2); }
+  .chip-blue  { background: rgba(26,92,138,0.08); color: var(--accent2); border: 1px solid rgba(26,92,138,0.18); }
+  .chip-muted { background: rgba(0,0,0,0.04); color: var(--muted); border: 1px solid var(--border); }
+
+  /* ── TITLE ── */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--accent); opacity: 0.5; }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4.5vw, 50px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  h1 em { color: var(--accent); font-style: normal; }
+
+  .title-block { margin-bottom: 24px; }
+
+  /* ── PS QUOTE ── */
+  .ps-quote {
+    background: linear-gradient(120deg, rgba(26,107,60,0.06), rgba(26,92,138,0.04));
+    border-left: 3px solid var(--accent);
+    padding: 18px 24px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    color: #4a4d3a;
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+  .ps-quote strong { color: var(--accent); font-weight: 600; }
+
+  /* ── PILLARS ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border2);
+    border: 1.5px solid var(--border2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .pillar { background: var(--surface); padding: 18px 16px; }
+  .pillar-icon { font-size: 18px; margin-bottom: 8px; }
+  .pillar-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .pillar p { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+
+  /* ── ALGO MATRIX ── */
+  .algo-matrix, .algo-matrix-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .algo-matrix-bottom { margin-bottom: 28px; }
+
+  .acard {
+    background: var(--surface);
+    border: 1.5px solid var(--border2);
+    border-radius: 6px;
+    padding: 18px 18px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .acard.winner {
+    border-color: rgba(26,107,60,0.35);
+    background: linear-gradient(140deg, rgba(26,107,60,0.05) 0%, #fff 60%);
+  }
+  .acard.winner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+  .acard.good { border-color: rgba(26,92,138,0.25); }
+  .acard.good::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent2);
+    opacity: 0.7;
+  }
+  .acard.weak { opacity: 0.8; }
+
+  .acard-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-win  { background: rgba(26,107,60,0.12); color: var(--accent); border: 1px solid rgba(26,107,60,0.2); }
+  .badge-alt  { background: rgba(26,92,138,0.1); color: var(--accent2); border: 1px solid rgba(26,92,138,0.2); }
+  .badge-base { background: rgba(0,0,0,0.05); color: var(--muted); border: 1px solid var(--border); }
+  .badge-skip { background: rgba(192,57,43,0.08); color: var(--red); border: 1px solid rgba(192,57,43,0.15); }
+
+  .acard-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .acard-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .pros, .cons { list-style: none; margin-bottom: 4px; }
+  .pros li, .cons li {
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: #5a5d4a;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 2px;
+  }
+  .pros li::before { content: '+'; position: absolute; left: 0; color: #1a7a40; font-weight: 700; }
+  .cons li::before { content: '−'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+  .acard-verdict {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .winner .acard-verdict { color: var(--accent); opacity: 0.8; }
+
+  /* Score bars */
+  .score-bars { margin: 10px 0; display: flex; flex-direction: column; gap: 5px; }
+  .sb { display: flex; align-items: center; gap: 8px; }
+  .sb-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); width: 76px; flex-shrink: 0; }
+  .sb-track { flex: 1; height: 4px; background: rgba(0,0,0,0.06); border-radius: 2px; overflow: hidden; }
+  .sb-fill { height: 100%; border-radius: 2px; }
+  .fill-green { background: var(--accent); }
+  .fill-blue  { background: var(--accent2); }
+  .fill-muted { background: rgba(0,0,0,0.18); }
+
+  /* ── WHY XGBOOST ── */
+  .why-box {
+    background: linear-gradient(130deg, rgba(26,107,60,0.07), rgba(26,92,138,0.04));
+    border: 1.5px solid rgba(26,107,60,0.2);
+    border-radius: 6px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .why-star { font-size: 36px; line-height: 1; margin-top: 2px; }
+  .why-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .why-title span { color: var(--accent); }
+  .why-reasons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+  .why-reason {
+    font-size: 12px;
+    color: #5a5d4a;
+    display: flex;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .why-reason::before { content: '→'; color: var(--accent); flex-shrink: 0; font-weight: 600; }
+
+  /* ── BOTTOM ROW ── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .bcard {
+    background: var(--surface);
+    border: 1.5px solid var(--border2);
+    border-radius: 6px;
+    padding: 20px;
+  }
+
+  /* Hypothesis */
+  .hypo-list { display: flex; flex-direction: column; gap: 9px; margin-top: 10px; }
+  .hypo {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 12px;
+    color: #5a5d4a;
+    line-height: 1.5;
+  }
+  .hypo-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    min-width: 20px;
+    margin-top: 1px;
+    font-weight: 600;
+  }
+  .hypo-test {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent2);
+    background: var(--accent2-bg);
+    border: 1px solid rgba(26,92,138,0.15);
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-left: auto;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  /* Stack pills */
+  .stack-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .spill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: var(--surface2);
+  }
+  .spill.h { border-color: rgba(26,107,60,0.3); color: var(--accent); background: var(--accent-bg); }
+  .spill.m { border-color: rgba(26,92,138,0.25); color: var(--accent2); background: var(--accent2-bg); }
+
+  /* ── TIMELINE + BUDGET ── */
+  .meta-strip {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .timeline-rows { margin-top: 10px; display: flex; flex-direction: column; }
+  .trow {
+    display: grid;
+    grid-template-columns: 170px 1fr 60px;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+  }
+  .trow:last-child { border-bottom: none; }
+  .trow-name { color: #5a5d4a; }
+  .trow-bar-wrap { background: rgba(0,0,0,0.06); border-radius: 2px; height: 5px; }
+  .trow-bar { height: 5px; border-radius: 2px; }
+  .trow-dur {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .budget-rows { margin-top: 10px; display: flex; flex-direction: column; }
+  .brow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+  }
+  .brow:last-child { border-bottom: none; }
+  .brow-item { color: #5a5d4a; }
+  .brow-amt { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); }
+  .brow-amt.muted { color: var(--muted); }
+  .btotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid rgba(26,107,60,0.2);
+  }
+  .btotal-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.1em; }
+  .btotal-amt { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--accent); font-weight: 600; }
+
+  /* ── FOOTER ── */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1.5px solid var(--border2);
+  }
+  .footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .footer-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    background: var(--accent2-bg);
+    border: 1px solid rgba(26,92,138,0.2);
+    padding: 4px 14px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="z1">
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="banner-left">Capstone · AI/ML Engineering · 2024–25</div>
+    <div class="banner-right">
+      <div class="chip chip-green">ML + Stats</div>
+      <div class="chip chip-blue">EDA + Bias</div>
+      <div class="chip chip-muted">React Dashboard</div>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <div class="eyebrow">Problem Statement</div>
+    <h1>NIRF Ranking <em>Intelligence</em><br>& Analytics Platform</h1>
+  </div>
+
+  <!-- PS Quote -->
+  <div class="ps-quote">
+    Build a <strong>web-based analytics and prediction platform</strong> that extracts NIRF ranking data from official PDF reports, transforms it into structured form, performs <strong>exploratory data analysis and statistical hypothesis testing</strong>, and applies machine learning to <strong>detect ranking bias, model feature importance, and forecast ranking trends</strong> across institutions and years — surfacing insights completely invisible in raw PDF rankings.
+  </div>
+
+  <!-- Pillars -->
+  <div class="section-label">Four Core Gaps This Solves</div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-icon">📄</div>
+      <div class="pillar-title">Data Locked in PDFs</div>
+      <p>NIRF publishes no API or dataset. Extraction pipeline is the first real engineering problem.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">⚖️</div>
+      <div class="pillar-title">Hidden Ranking Bias</div>
+      <p>Users see ranks, not the systemic patterns favouring certain institution types.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">📈</div>
+      <div class="pillar-title">No Trend Visibility</div>
+      <p>No tool lets institutions track rank movement or forecast future position over time.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🔬</div>
+      <div class="pillar-title">No Statistical Proof</div>
+      <p>Observations about ranking patterns are never validated with rigorous statistical tests.</p>
+    </div>
+  </div>
+
+  <!-- Algorithm Section -->
+  <div class="section-label">ML Algorithm Decision Matrix — All Options Evaluated</div>
+
+  <div class="algo-matrix">
+    <!-- XGBoost -->
+    <div class="acard winner">
+      <div class="acard-badge badge-win">★ Best Choice</div>
+      <div class="acard-name">XGBoost</div>
+      <div class="acard-role">Primary · Rank Modeling + Bias Detection</div>
+      <div class="score-bars">
+        <div class="sb"><span class="sb-label">Accuracy</span><div class="sb-track"><div class="sb-fill fill-green" style="width:92%"></div></div></div>
+        <div class="sb"><span class="sb-label">Explainability</span><div class="sb-track"><div class="sb-fill fill-green" style="width:88%"></div></div></div>
+        <div class="sb"><span class="sb-label">Missing Data</span><div class="sb-track"><div class="sb-fill fill-green" style="width:95%"></div></div></div>
+        <div class="sb"><span class="sb-label">Bias Analysis</span><div class="sb-track"><div class="sb-fill fill-green" style="width:90%"></div></div></div>
+      </div>
+      <ul class="pros">
+        <li>Non-linear feature interactions (TLR×RPC etc.)</li>
+        <li>Native SHAP support for bias explanation</li>
+        <li>Handles noisy, messy real-world PDF data</li>
+        <li>Best accuracy on medium tabular datasets</li>
+        <li>Industry standard — strong in evaluations</li>
+      </ul>
+      <div class="acard-verdict">→ Final model. No other algorithm matches this balance of accuracy + explainability for this exact problem.</div>
+    </div>
+
+    <!-- LightGBM -->
+    <div class="acard good">
+      <div class="acard-badge badge-alt">Strong Alt</div>
+      <div class="acard-name">LightGBM</div>
+      <div class="acard-role">Alternative · Speed-Optimised Gradient Boost</div>
+      <div class="score-bars">
+        <div class="sb"><span class="sb-label">Accuracy</span><div class="sb-track"><div class="sb-fill fill-blue" style="width:89%"></div></div></div>
+        <div class="sb"><span class="sb-label">Explainability</span><div class="sb-track"><div class="sb-fill fill-blue" style="width:78%"></div></div></div>
+        <div class="sb"><span class="sb-label">Speed</span><div class="sb-track"><div class="sb-fill fill-blue" style="width:97%"></div></div></div>
+        <div class="sb"><span class="sb-label">Bias Analysis</span><div class="sb-track"><div class="sb-fill fill-blue" style="width:72%"></div></div></div>
+      </div>
+      <ul class="pros">
+        <li>Faster training at large scale</li>
+        <li>Comparable accuracy ceiling to XGBoost</li>
+      </ul>
+      <ul class="cons">
+        <li>Less mature SHAP / bias tooling</li>
+        <li>Overkill for NIRF dataset size</li>
+        <li>Harder to justify in evaluations</li>
+      </ul>
+      <div class="acard-verdict">→ Use only if data scales beyond 100K rows. Unnecessary for current NIRF scope.</div>
+    </div>
+
+    <!-- Random Forest -->
+    <div class="acard good">
+      <div class="acard-badge badge-base">Baseline</div>
+      <div class="acard-name">Random Forest</div>
+      <div class="acard-role">Comparison Baseline Model</div>
+      <div class="score-bars">
+        <div class="sb"><span class="sb-label">Accuracy</span><div class="sb-track"><div class="sb-fill fill-muted" style="width:78%"></div></div></div>
+        <div class="sb"><span class="sb-label">Explainability</span><div class="sb-track"><div class="sb-fill fill-muted" style="width:72%"></div></div></div>
+        <div class="sb"><span class="sb-label">Stability</span><div class="sb-track"><div class="sb-fill fill-muted" style="width:88%"></div></div></div>
+        <div class="sb"><span class="sb-label">Bias Analysis</span><div class="sb-track"><div class="sb-fill fill-muted" style="width:65%"></div></div></div>
+      </div>
+      <ul class="pros">
+        <li>Low variance, robust to overfitting</li>
+        <li>Good feature importance baseline</li>
+        <li>Easy to train and interpret</li>
+      </ul>
+      <ul class="cons">
+        <li>Lower accuracy than boosting methods</li>
+        <li>Weaker at capturing feature interactions</li>
+      </ul>
+      <div class="acard-verdict">→ Train this first. If XGBoost doesn't beat it by ≥5%, check preprocessing.</div>
+    </div>
+  </div>
+
+  <div class="algo-matrix-bottom">
+    <!-- Prophet/ARIMA -->
+    <div class="acard good">
+      <div class="acard-badge badge-alt">Trend Module</div>
+      <div class="acard-name">Prophet / ARIMA</div>
+      <div class="acard-role">Time-Series Rank Forecasting</div>
+      <ul class="pros">
+        <li>Purpose-built for yearly trend forecasting</li>
+        <li>Prophet handles missing years gracefully</li>
+        <li>ARIMA good for univariate rank series</li>
+      </ul>
+      <ul class="cons">
+        <li>Cannot do multi-feature bias modeling</li>
+        <li>Needs sufficient historical points per institution</li>
+      </ul>
+      <div class="acard-verdict">→ Separate module alongside XGBoost. Don't force XGBoost to do time-series.</div>
+    </div>
+
+    <!-- Linear Regression -->
+    <div class="acard weak">
+      <div class="acard-badge badge-base">Benchmark</div>
+      <div class="acard-name">Linear Regression</div>
+      <div class="acard-role">Naive Benchmark Only</div>
+      <ul class="pros">
+        <li>Interpretable coefficients</li>
+        <li>Good sanity-check baseline</li>
+      </ul>
+      <ul class="cons">
+        <li>Assumes linearity — invalid for rankings</li>
+        <li>Cannot capture TLR × RPC interactions</li>
+        <li>Fails on non-Gaussian residual patterns</li>
+      </ul>
+      <div class="acard-verdict">→ Include purely as benchmark. Its underperformance proves XGBoost is needed.</div>
+    </div>
+
+    <!-- SVM / KNN -->
+    <div class="acard weak">
+      <div class="acard-badge badge-skip">Skip</div>
+      <div class="acard-name">SVM / KNN / Neural Net</div>
+      <div class="acard-role">Not Suitable for This Problem</div>
+      <ul class="cons">
+        <li>KNN fails on high-dimensional tabular data</li>
+        <li>SVM provides no native feature importance</li>
+        <li>Neural nets: overkill, uninterpretable here</li>
+        <li>None handle missing values natively</li>
+      </ul>
+      <div class="acard-verdict">→ Theoretically possible. Practically wrong. Clear elimination strengthens your methodology.</div>
+    </div>
+  </div>
+
+  <!-- Why XGBoost wins -->
+  <div class="why-box">
+    <div class="why-star">🏆</div>
+    <div>
+      <div class="why-title">Why <span>XGBoost</span> is the Definitive Choice</div>
+      <div class="why-reasons">
+        <div class="why-reason">NIRF is structured/tabular — XGBoost's native domain</div>
+        <div class="why-reason">SHAP values directly power the bias analysis layer</div>
+        <div class="why-reason">Handles NaN from PDF extraction without imputation hacks</div>
+        <div class="why-reason">Non-linear TLR × RPC interactions captured automatically</div>
+        <div class="why-reason">Trains in under 10 seconds on NIRF dataset size</div>
+        <div class="why-reason">Feature importance explains which parameters drive rank most</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hypothesis + Stack -->
+  <div class="bottom-row">
+    <div class="bcard">
+      <div class="section-label" style="margin-bottom:0">Statistical Hypotheses to Test</div>
+      <div class="hypo-list">
+        <div class="hypo">
+          <span class="hypo-id">H₁</span>
+          <span>Top-ranked institutions have significantly higher RPC scores than lower-ranked peers</span>
+          <span class="hypo-test">t-test</span>
+        </div>
+        <div class="hypo">
+          <span class="hypo-id">H₂</span>
+          <span>IITs/NITs show statistically different rank distributions vs. private colleges</span>
+          <span class="hypo-test">ANOVA</span>
+        </div>
+        <div class="hypo">
+          <span class="hypo-id">H₃</span>
+          <span>Research score has stronger rank correlation than outreach score</span>
+          <span class="hypo-test">Spearman ρ</span>
+        </div>
+        <div class="hypo">
+          <span class="hypo-id">H₄</span>
+          <span>Urban institutions are disproportionately represented in top 20</span>
+          <span class="hypo-test">Chi-square</span>
+        </div>
+      </div>
+    </div>
+    <div class="bcard">
+      <div class="section-label" style="margin-bottom:0">Technology Stack</div>
+      <div class="stack-grid">
+        <div class="spill h">XGBoost</div>
+        <div class="spill h">SHAP</div>
+        <div class="spill h">Prophet</div>
+        <div class="spill m">FastAPI</div>
+        <div class="spill m">React</div>
+        <div class="spill m">Recharts</div>
+        <div class="spill">pdfplumber</div>
+        <div class="spill">pandas</div>
+        <div class="spill">scipy.stats</div>
+        <div class="spill">scikit-learn</div>
+        <div class="spill">PostgreSQL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline + Budget -->
+  <div class="meta-strip">
+    <div class="bcard">
+      <div class="section-label" style="margin-bottom:0">Realistic Build Timeline</div>
+      <div class="timeline-rows">
+        <div class="trow">
+          <div class="trow-name">PDF Collection & Extraction</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:25%;background:var(--accent);opacity:0.7"></div></div>
+          <div class="trow-dur">1–2 wks</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">Data Cleaning & Feature Engg.</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:13%;background:var(--accent);opacity:0.55"></div></div>
+          <div class="trow-dur">1 wk</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">EDA & Hypothesis Testing</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:13%;background:var(--accent2);opacity:0.65"></div></div>
+          <div class="trow-dur">1 wk</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">ML Modeling & Validation</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:25%;background:var(--accent2);opacity:0.55"></div></div>
+          <div class="trow-dur">1–2 wks</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">Backend API (FastAPI)</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:13%;background:var(--accent);opacity:0.4"></div></div>
+          <div class="trow-dur">1 wk</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">React Dashboard</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:25%;background:var(--accent2);opacity:0.45"></div></div>
+          <div class="trow-dur">1–2 wks</div>
+        </div>
+        <div class="trow">
+          <div class="trow-name">Testing & Deployment</div>
+          <div class="trow-bar-wrap"><div class="trow-bar" style="width:13%;background:var(--accent);opacity:0.3"></div></div>
+          <div class="trow-dur">1 wk</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bcard">
+      <div class="section-label" style="margin-bottom:0">Project Budget</div>
+      <div class="budget-rows">
+        <div class="brow">
+          <div class="brow-item">Python Libraries</div>
+          <div class="brow-amt muted">₹ 0</div>
+        </div>
+        <div class="brow">
+          <div class="brow-item">React / FastAPI / DB</div>
+          <div class="brow-amt muted">₹ 0</div>
+        </div>
+        <div class="brow">
+          <div class="brow-item">Cloud Hosting (free tier)</div>
+          <div class="brow-amt muted">₹ 0</div>
+        </div>
+        <div class="brow">
+          <div class="brow-item">VPS Hosting (optional)</div>
+          <div class="brow-amt">₹ 500 – 2,000</div>
+        </div>
+        <div class="brow">
+          <div class="brow-item">Domain (optional)</div>
+          <div class="brow-amt">₹ 500 – 1,000</div>
+        </div>
+      </div>
+      <div class="btotal">
+        <div class="btotal-label">TOTAL RANGE</div>
+        <div class="btotal-amt">₹ 0 – 3,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-meta">Data Source: nirf.ac.in · 6–9 Weeks · 1–3 Members</div>
+    <div class="footer-tag">Tabular ML + Time-Series + Statistical Inference</div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>
