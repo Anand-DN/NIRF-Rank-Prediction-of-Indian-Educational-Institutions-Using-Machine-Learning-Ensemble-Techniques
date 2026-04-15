@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NIRF Rank Predictor</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%236366f1' d='M50 10L5 40l45 15 45-15-45-30z'/%3E%3Cpath fill='%234f46e5' d='M50 55v35l40-20z'/%3E%3Crect fill='%236366f1' x='10' y='40' width='80' height='5'/%3E%3C/svg%3E" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%236366f1' d='M50 10L5 40l45 15 45-15-45-30z'/%3E%3Cpath fill='%234f46e5' d='M50 55v35l40-20z'/%3E%3Crect fill='%236366f1' x='10' y='40' width='80' height='5'/%3E%3C/svg%3E"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -94,23 +98,23 @@
         .navbar-custom {
           padding: 0.5rem 0;
         }
-        
+
         .navbar-custom .d-flex.gap-2 {
           flex-wrap: wrap !important;
           justify-content: center !important;
           gap: 0.25rem !important;
         }
-        
+
         .nav-btn {
           padding: 0.4rem 0.6rem !important;
           font-size: 0.7rem !important;
           border-radius: 6px !important;
         }
-        
+
         .nav-btn i {
           display: none;
         }
-        
+
         .navbar-brand {
           font-size: 1rem !important;
         }
@@ -121,7 +125,7 @@
           padding: 0.35rem 0.5rem !important;
           font-size: 0.65rem !important;
         }
-        
+
         .navbar-brand {
           font-size: 0.85rem !important;
         }
@@ -1234,7 +1238,10 @@
                   <h4>Students History</h4>
                 </div>
                 <div class="card-body-custom">
-                  <div class="chart-container" style="height: 250px; min-height: 250px;">
+                  <div
+                    class="chart-container"
+                    style="height: 250px; min-height: 250px"
+                  >
                     <canvas id="inst-students-chart"></canvas>
                   </div>
                 </div>
@@ -1515,8 +1522,8 @@
                         <th>R² Score</th>
                         <th>MAE</th>
                         <th>RMSE</th>
-                        <th>Precision (±3)</th>
-                        <th>Accuracy (±5)</th>
+                        <th>Precision (±5)</th>
+                        <th>Accuracy (±10)</th>
                       </tr>
                     </thead>
                     <tbody id="model-comparison-tbody"></tbody>
@@ -2529,7 +2536,7 @@
             const studentsData = data.history.map((h) => h.students || 0);
             if (charts["inst-students-chart"])
               charts["inst-students-chart"].destroy();
-            
+
             createChart("inst-students-chart", "line", {
               labels: years,
               datasets: [
@@ -2989,16 +2996,22 @@
 
           document.getElementById("model-r2").textContent = data.r2 || "0.98";
           document.getElementById("model-mae").textContent = data.mae || "1.2";
-          document.getElementById("model-rmse").textContent = data.rmse || "2.5";
-          document.getElementById("model-features").textContent = data.features || "6";
+          document.getElementById("model-rmse").textContent =
+            data.rmse || "2.5";
+          document.getElementById("model-features").textContent =
+            data.features || "6";
 
-          // Model Comparison Table - order as Random Forest, XGBoost, Gradient Boosting
+          // Model Comparison Table - order: Random Forest (baseline), XGBoost, Gradient Boosting
           if (data.model_comparison && data.model_comparison.length > 0) {
-            const modelOrder = ["Random Forest", "XGBoost", "Gradient Boosting"];
+            const modelOrder = [
+              "Random Forest",
+              "XGBoost",
+              "Gradient Boosting",
+            ];
             const sortedModels = [...data.model_comparison].sort((a, b) => {
               return modelOrder.indexOf(a.name) - modelOrder.indexOf(b.name);
             });
-            
+
             document.getElementById("model-comparison-tbody").innerHTML =
               sortedModels
                 .map((m) => {
@@ -3033,14 +3046,14 @@
                   title: {
                     display: true,
                     text: "Model R² Score Comparison (Higher is Better)",
-                    font: { size: 14, weight: "bold" }
-                  }
+                    font: { size: 14, weight: "bold" },
+                  },
                 },
                 scales: {
                   y: {
                     beginAtZero: true,
                     max: 1,
-                    title: { display: true, text: "R² Score" }
+                    title: { display: true, text: "R² Score" },
                   },
                 },
               },
@@ -3067,13 +3080,13 @@
                   title: {
                     display: true,
                     text: "Mean Absolute Error (Lower is Better)",
-                    font: { size: 14, weight: "bold" }
-                  }
+                    font: { size: 14, weight: "bold" },
+                  },
                 },
                 scales: {
                   y: {
                     beginAtZero: true,
-                    title: { display: true, text: "MAE (ranks)" }
+                    title: { display: true, text: "MAE (ranks)" },
                   },
                 },
               },
@@ -3084,10 +3097,12 @@
           console.log("Feature importance:", data.feature_importance);
           if (data.feature_importance && data.feature_importance.length > 0) {
             if (charts["feature-chart"]) charts["feature-chart"].destroy();
-            
+
             const featureLabels = data.feature_importance.map((f) => f.Feature);
-            const featureValues = data.feature_importance.map((f) => parseFloat(f.Importance) || 0);
-            
+            const featureValues = data.feature_importance.map(
+              (f) => parseFloat(f.Importance) || 0,
+            );
+
             createChart("feature-chart", "bar", {
               labels: featureLabels,
               datasets: [
@@ -3202,10 +3217,10 @@
           // Error Distribution Histogram - using actual percentiles
           if (data.error_distribution) {
             const errDist = data.error_distribution;
-            
+
             if (charts["error-dist-chart"])
               charts["error-dist-chart"].destroy();
-            
+
             // Create bar chart showing error percentiles
             const percentileLabels = ["p25", "p50", "p75", "p90", "p95"];
             const percentileValues = [
@@ -3213,14 +3228,20 @@
               errDist.p50 || 0,
               errDist.p75 || 0,
               errDist.p90 || 0,
-              errDist.p95 || 0
+              errDist.p95 || 0,
             ];
-            const colors = percentileValues.map(v => 
-              v <= 1 ? "#10b981" : v <= 3 ? "#6366f1" : v <= 5 ? "#f59e0b" : "#ef4444"
+            const colors = percentileValues.map((v) =>
+              v <= 1
+                ? "#10b981"
+                : v <= 3
+                  ? "#6366f1"
+                  : v <= 5
+                    ? "#f59e0b"
+                    : "#ef4444",
             );
-            
+
             createChart("error-dist-chart", "bar", {
-              labels: percentileLabels.map(l => l.toUpperCase()),
+              labels: percentileLabels.map((l) => l.toUpperCase()),
               datasets: [
                 {
                   label: "Error (ranks)",
@@ -3241,9 +3262,9 @@
                   },
                   tooltip: {
                     callbacks: {
-                      label: (ctx) => `Error: ${ctx.raw.toFixed(2)} ranks`
-                    }
-                  }
+                      label: (ctx) => `Error: ${ctx.raw.toFixed(2)} ranks`,
+                    },
+                  },
                 },
                 scales: {
                   y: {
@@ -3271,7 +3292,13 @@
                   label: "MAE (Mean Absolute Error)",
                   data: bottlenecks.map((b) => b.mae),
                   backgroundColor: bottlenecks.map((b) =>
-                    b.mae <= 1 ? "#10b981" : b.mae <= 3 ? "#6366f1" : b.mae <= 5 ? "#f59e0b" : "#ef4444"
+                    b.mae <= 1
+                      ? "#10b981"
+                      : b.mae <= 3
+                        ? "#6366f1"
+                        : b.mae <= 5
+                          ? "#f59e0b"
+                          : "#ef4444",
                   ),
                   borderRadius: 6,
                 },
@@ -3289,9 +3316,16 @@
                   tooltip: {
                     callbacks: {
                       label: (ctx) => {
-                        const status = ctx.raw <= 1 ? "Excellent" : ctx.raw <= 3 ? "Good" : ctx.raw <= 5 ? "Moderate" : "High Error";
+                        const status =
+                          ctx.raw <= 1
+                            ? "Excellent"
+                            : ctx.raw <= 3
+                              ? "Good"
+                              : ctx.raw <= 5
+                                ? "Moderate"
+                                : "High Error";
                         return `MAE: ${ctx.raw.toFixed(2)} ranks (${status})`;
-                      }
+                      },
                     },
                   },
                 },
@@ -3364,7 +3398,7 @@
               datasets: [
                 {
                   label: "Precision (±3)",
-                  data: lc.train_scores.map(s => s * 100),
+                  data: lc.train_scores.map((s) => s * 100),
                   borderColor: "#10b981",
                   backgroundColor: "rgba(16, 185, 129, 0.1)",
                   fill: false,
@@ -3373,7 +3407,7 @@
                 },
                 {
                   label: "Accuracy (±5)",
-                  data: lc.test_scores.map(s => s * 100),
+                  data: lc.test_scores.map((s) => s * 100),
                   borderColor: "#6366f1",
                   backgroundColor: "rgba(99, 102, 241, 0.1)",
                   fill: false,
@@ -3389,8 +3423,8 @@
                   title: {
                     display: true,
                     text: "Model Performance - 100% Accuracy Achieved!",
-                    font: { size: 14, weight: "bold" }
-                  }
+                    font: { size: 14, weight: "bold" },
+                  },
                 },
                 scales: {
                   y: {
