@@ -21,7 +21,7 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 
 PROJECT_DIR = Path(__file__).parent.parent
 MODEL_DIR = PROJECT_DIR / "models"
-DATA_PATH = PROJECT_DIR / "data/csv/NIRF_cleaned.csv"
+DATA_PATH = PROJECT_DIR / "data/csv/NIRF_cleaned_imputed.csv"
 
 # Load dataset
 df = pd.read_csv(DATA_PATH)
